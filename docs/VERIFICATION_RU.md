@@ -1,0 +1,11 @@
+# Происхождение и проверка
+
+Публикационная копия взята из сохранённого рабочего source. FILES.sha256.json фиксирует SHA256 всех файлов, кроме самого manifest. SOURCE_PROVENANCE.json содержит исходные хеши и совпадения копии; SOURCE_CHANGES.csv отделяет поздние отличия от supplied candidate. Рабочий source после подготовки проверяется по полному исходному manifest и не изменяется.
+
+Связь с прежним runtime подтверждена выбранными installation config/compiled artefact hashes и журналами сборки. Полное побайтовое соответствие каждого исходника всем VM-built artefacts **NOT VERIFIED**: полный VM source/runtime linkage manifest в доступной host-копии отсутствует. Новый kit/docs и исключение gateway дополнительно отличают комплект от стенда. Не называйте будущий commit целиком прошедшим старые runtime tests.
+
+Исторические config SHA256: base `55cd59b1e67bbf77e86870e7155fbb0df29cb4585279b045945c8678f6ed8e06`; web `80f722ee12faaaafd55f1a6db7364d84594c6be8acd74153a4658b64b8f83e06f`; headless `d0c99638f497c315e248ab63564fa27b4792c60506d6ab8f22c87018b64ab95d`. Compiled CLI `f98d83c629363c011dde2db52a907af5d44afc90e89f720b4faa5ca8808c1fdf`; compiled llm-pi-ai `d46dbc30aeb3414190000e6f8aeAAF994246b5e5c651de07639f4a7e92de37ef` (регистр hex незначим). Бинарные compiled файлы не включены.
+
+Проверка нового локального commit описана в [GitHub Desktop](PUBLISH_GITHUB_DESKTOP_RU.md). `kit/Verify-Publication.py` сравнивает набор и SHA256 committed blobs с manifest, проверяет всю доступную local history на отсутствие иных файлов/изменённых blobs и сообщает действительный SHA. Используйте доверенную исходную копию verifier и внешне сохранённый SHA manifest; иначе совместная подмена manifest/скрипта не обнаруживается. Проверка истории не заменяет ручной просмотр author email и secret scan. После любого изменения файлов manifest/архив нужно пересоздать и перепроверить; просто старый PASS неприменим.
+
+Проверена сама утилита commit verification на изолированном synthetic Git fixture: полное подготовленное дерево с ранним subset commit принимается, новый unprepared committed blob отклоняется. Это тест упаковки, не новый Harness runtime test. PowerShell scripts прошли синтаксический разбор без исполнения. Encrypted Office fixture прочитан: только `<Types/>`, 8 bytes.

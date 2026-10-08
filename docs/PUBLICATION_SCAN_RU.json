@@ -1,0 +1,25 @@
+{
+  "scope": "Every regular publication file including hidden files; UTF-8 source scan, binary payload classification, OOXML members inspected separately. No original Git history included.",
+  "originalScanFiles": 14127,
+  "highConfidenceCandidates": 8,
+  "highConfidenceClassification": "8 synthetic test fixture key literals; no production key pattern found",
+  "literalCandidates": 194,
+  "literalClassification": "Synthetic tests/mock values, CI environment references and UI labels; no real credential identified",
+  "personalHostMatches": 0,
+  "forbiddenPayloads": 0,
+  "nestedArchives": 0,
+  "binaryExtensions": {
+    ".png": 31,
+    ".ico": 1,
+    ".doc": 1,
+    ".ppt": 1,
+    ".xls": 1,
+    ".docx": 1,
+    ".xlsx": 15,
+    ".woff2": 3,
+    ".gif": 1
+  },
+  "limitations": "Heuristic source/metadata review does not prove absence of every possible encoded secret or all upstream replay personal content. Mandatory human commit/author review remains.",
+  "encryptedFixture": "PASS: synthetic test member decoded, CRC verified; exact plaintext <Types/> (8 bytes), no user data.",
+  "OOXMLInnerMembers": "PASS: accessible XML/rels scanned, encrypted synthetic member decoded and inspected"
+}

@@ -1,0 +1,2 @@
+# Preserve publication manifest bytes when creating the first Git commit.
+* -text
