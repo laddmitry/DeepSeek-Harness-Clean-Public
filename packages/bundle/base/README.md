@@ -63,7 +63,7 @@ The bundle mounts [MCP resources](../../mcp/mcp-resources/README.md) once. Confi
 
 ### Shell tools per platform
 
-On macOS and Linux you get the bash shell tools; on Windows you get the PowerShell twins instead, so exactly one shell stack is available per machine. The safety behavior is identical on every platform. A Windows host that prefers the unconfined PowerShell executor can switch the shell rows in its profile patch — the switch must disable both PowerShell rows and re-enable both bash rows, otherwise the profile fails to load.
+The cleaned LOCAL_ONLY web/headless profiles expose filesystem tools instead of arbitrary shell, persistent-terminal, PTC, or workflow execution on every platform. Windows write-restricted tokens retain unrestricted reads, so this composition removes the execution route rather than claiming OS read isolation. The permission selector requires a shell provider and is disabled; the installation keeps its fixed workspace-write filesystem policy. Trusted operator commands run separately.
 
 ### Changing the defaults
 
@@ -85,7 +85,7 @@ A patch replaces the targeted row's whole `config` rather than merging into it. 
 
 ### Platform gating
 
-The patch gates the two shell stacks by platform on its own rows: `bash-sandbox` and `tool-bash` carry `disabled: !!js process.platform === 'win32'`, and their twins `pwsh-sandbox` and `tool-pwsh` mount on win32 only with the inverted expression. The permission surface stays identical to POSIX: the sandbox policy executes the same file-effect policy through the Windows ACL restricted-token runner (`dsh-sandbox-local` → `@deepseek-ai/dsh-sandbox-windows-acl`), and `fs-sandbox` keeps fencing `ctx.fs` writes — mounting `dsh-fs-local` alongside it would double-register `ctx.fs` and fail the load.
+The cleaned installation sets shell providers and consumers, persistent terminals, PTC, and workflow rows to disabled: true. Profile and preset preflight refuses the corresponding resolved package names before import, including aliases and nested groups. These rows cannot be restored through the excluded user/home/CLI patch layers. Filesystem tools retain the sandboxed filesystem provider.
 
 ### Source map
 
@@ -127,6 +127,8 @@ Indirectly, through each inserted row's package, which owns that row's model-fac
 The bundle itself adds no request prefix; each inserted row's package owns any cache effect.
 
 ## Known Limitations and Deferred Work
+
+The cleaned LOCAL_ONLY installation disables arbitrary shell, persistent-terminal, PTC, and workflow execution. Model-facing filesystem tools remain available. Windows write-restricted tokens do not restrict reads; this composition removes the arbitrary execution route instead of claiming OS read isolation. The installation preflight refuses these providers and consumers in preset trees before module import, including compatibility exemptions and package aliases.
 
 <a id="known-limitations-and-deferred-work"></a>
 

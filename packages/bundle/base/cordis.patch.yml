@@ -229,13 +229,13 @@
 
     - id: bash-sandbox
       name: '@deepseek-ai/dsh-bash-sandbox'
-      disabled: !!js process.platform === 'win32'
+      disabled: true
       config:
         timeoutMs: 60000
 
     - id: pwsh-sandbox
       name: '@deepseek-ai/dsh-pwsh-sandbox'
-      disabled: !!js process.platform !== 'win32'
+      disabled: true
 
     - id: approval
       name: '@deepseek-ai/dsh-user-approval'
@@ -244,6 +244,7 @@
 
     - id: permission
       name: '@deepseek-ai/dsh-permission-presets'
+      disabled: true
       config:
         presets:
           read-only:
@@ -258,11 +259,11 @@
 
     - id: tool-bash
       name: '@deepseek-ai/dsh-tool-bash'
-      disabled: !!js process.platform === 'win32'
+      disabled: true
 
     - id: tool-pwsh
       name: '@deepseek-ai/dsh-tool-pwsh'
-      disabled: !!js process.platform !== 'win32'
+      disabled: true
 
     - id: tool-jobs
       name: '@deepseek-ai/dsh-tool-jobs'
@@ -384,14 +385,17 @@
 
     - id: ptc-runtime
       name: '@deepseek-ai/dsh-ptc-runtime-node'
+      disabled: true
 
     - id: workflow-ptc
       name: '@deepseek-ai/dsh-workflow-ptc'
+      disabled: true
       config:
         provider: spawn
 
     - id: tool-workflow
       name: '@deepseek-ai/dsh-tool-workflow'
+      disabled: true
 
     - id: timeout-policy
       name: '@deepseek-ai/dsh-tool-call-timeout-policy'

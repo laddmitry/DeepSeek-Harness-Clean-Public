@@ -35,7 +35,7 @@
     # process into PTC mode while per-session tool-presentation selection is being
     # designed; unset keeps the schema default (native). Remove the env seam
     # once the web UI owns the choice per session.
-    mode: !!js process.env.DSH_TOOLS_MODE
+    mode: native
 
 # ── web-only host rows, the transport layer, and the browser roster ─────────
 

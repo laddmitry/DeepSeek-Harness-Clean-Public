@@ -15,7 +15,7 @@ import {
 
 const runtime = getDshRuntimeVersion()
 
-function fixture() {
+function fixture(profileName = 'preflight') {
   const temporary = mkdtempSync(join(tmpdir(), 'dsh-preflight-'))
   let ctx: Context | undefined
   onTestFinished(async () => {
@@ -50,7 +50,7 @@ export function apply() { record('apply:${name}') }
   }
 
   const profile: ProfileContext = {
-    name: 'preflight', dir, patchPath: join(dir, 'cordis.patch.yml'),
+    name: profileName, dir, patchPath: join(dir, 'cordis.patch.yml'),
     installAnchor: join(dir, 'package.json'), cwd: dir, home: dir,
     startedBundles: [], overlays: [], telemetryDisabledEnv: undefined,
   }
@@ -362,4 +362,25 @@ it('reuses the documented literal Include dialect when reading included entries'
   // The launcher mounts an Include with a file URL, which a Windows path cannot stand in for: `C:` reads as a scheme.
   expect(await f.run([{ insert: [{ id: 'outer', name: 'cordis:include', config: { path: pathToFileURL(list).href } }] }]))
     .toEqual(['import:allowed-plugin', 'apply:allowed-plugin'])
+})
+
+
+it('LOCAL_ONLY refuses shell consumers in nested trees before import, despite compatibility grants', async () => {
+  const f = fixture('web')
+  f.plugin('@deepseek-ai/dsh-tool-pwsh')
+  f.plugin('allowed-fs-plugin')
+  f.exemptions({ '@deepseek-ai/dsh-tool-pwsh@1.0.0': [runtime] })
+  const effects = await f.run([{ insert: [{ name: 'cordis:group', group: true, config: [
+    { name: '@deepseek-ai/dsh-tool-pwsh' }, { name: 'allowed-fs-plugin' },
+  ] }] }])
+  expect(effects).toEqual(['import:allowed-fs-plugin', 'apply:allowed-fs-plugin'])
+  expect(f.warnings.join('\n')).toContain('LOCAL_ONLY installation disables arbitrary execution')
+})
+
+it('LOCAL_ONLY refuses a persistent-shell module resolved under an unrelated alias', async () => {
+  const f = fixture('headless')
+  f.plugin('@deepseek-ai/dsh-tool-pwsh-persistent', { alias: 'unrelated-alias' })
+  const filename = join(f.dir, 'node_modules/unrelated-alias/index.mjs')
+  expect(await f.run([{ insert: [{ name: pathToFileURL(filename).href }] }])).toEqual([])
+  expect(f.warnings.join('\n')).toContain('LOCAL_ONLY installation disables arbitrary execution')
 })

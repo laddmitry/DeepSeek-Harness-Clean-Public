@@ -192,6 +192,8 @@ Boot itself changes no request prefix. `addHarnessSourceSection` places its sour
 
 ## Known Limitations and Deferred Work
 
+The cleaned web/headless installation refuses known arbitrary execution providers and consumers before importing profile or preset rows. This policy precedes compatibility grants and identifies resolved package aliases by their manifests. It applies to the reviewed installation composition; modified installation code and external embeddings are outside its scope. Windows write-restricted tokens do not become read-isolated.
+
 <a id="known-limitations-and-deferred-work"></a>
 
 These limits describe when this boot library is a poor fit or needs special care. They are current package constraints, not a task backlog.

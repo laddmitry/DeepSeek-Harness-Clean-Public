@@ -63,7 +63,7 @@ kind: "package-bundle"
 
 ### 各平台的 shell 工具
 
-在 macOS 与 Linux 上你获得 bash shell 工具；在 Windows 上则获得对应的 PowerShell 孪生工具，因此每台机器恰好有一套 shell 栈。各平台的安全行为完全一致。偏好不受沙盒约束的 PowerShell 执行器的 Windows 主机可以在其 profile patch 中切换 shell 行——切换必须同时禁用两个 PowerShell 行并重新启用两个 bash 行，否则 profile 无法加载。
+清理后的 LOCAL_ONLY web/headless profile 在所有平台上提供文件系统工具，而不提供任意 shell、持久终端、PTC 或工作流执行。Windows 写入受限令牌仍允许不受限制的读取，所以此组合移除执行路径，而不宣称提供操作系统读取隔离。权限选择器需要 shell 提供者，因此已禁用；安装保留固定的 workspace-write 文件系统策略。可信操作员命令单独运行。
 
 ### 更改默认值
 
@@ -85,7 +85,7 @@ patch 会替换目标行的整个 `config`，而不是合并进它。后续组�
 
 ### 平台门控
 
-patch 在自身上按平台门控两个 shell 栈：`bash-sandbox` 与 `tool-bash` 携带 `disabled: !!js process.platform === 'win32'`，孪生行 `pwsh-sandbox` 与 `tool-pwsh` 以取反的表达式仅在 win32 挂载。权限面与 POSIX 完全一致：沙箱策略通过 Windows ACL 受限令牌 runner（`dsh-sandbox-local` → `@deepseek-ai/dsh-sandbox-windows-acl`）执行相同的文件效果策略，`fs-sandbox` 继续围栏 `ctx.fs` 写入——在其旁再挂载 `dsh-fs-local` 会重复注册 `ctx.fs` 并在加载时失败。
+清理后的安装将 shell 提供者和工具、持久终端、PTC 以及工作流条目设为 disabled: true。Profile 与预设预检在导入前拒绝相应的已解析包名，包括别名和嵌套组。被排除的用户、home 和 CLI patch 图层无法恢复这些条目。文件系统工具保留沙箱文件系统提供者。
 
 ### 源码地图
 
@@ -127,6 +127,8 @@ patch 在自身上按平台门控两个 shell 栈：`bash-sandbox` 与 `tool-bas
 组合包本身不添加任何请求前缀；每条插入行所属的包负责各自的缓存影响。
 
 ## 已知限制与延期工作
+
+清理后的 LOCAL_ONLY 安装禁用任意 shell、持久终端、PTC 和工作流代码执行，保留面向模型的文件系统工具。Windows 写入受限令牌不限制读取；此组合移除任意执行路径，并不宣称提供操作系统读取隔离。安装预检在导入模块前拒绝预设树中的这些提供者和工具，包括兼容性豁免和包别名。
 
 <a id="known-limitations-and-deferred-work"></a>
 

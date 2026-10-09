@@ -14,6 +14,35 @@ import type {} from './profile-context.ts'
 import { evaluatePluginCompatibility, pluginCompatibilityWarning } from './plugin-compatibility.ts'
 import { readProfileCompatibility } from './profile-compatibility.ts'
 
+/** Arbitrary execution providers and consumers unavailable in the cleaned installation. */
+const LOCAL_ONLY_EXECUTION_PACKAGES = new Set([
+  '@deepseek-ai/dsh-tool-pwsh',
+  '@deepseek-ai/dsh-tool-bash',
+  '@deepseek-ai/dsh-tool-pwsh-persistent',
+  '@deepseek-ai/dsh-tool-bash-persistent',
+  '@deepseek-ai/dsh-tool-terminal',
+  '@deepseek-ai/dsh-pwsh-local',
+  '@deepseek-ai/dsh-pwsh-sandbox',
+  '@deepseek-ai/dsh-bash-local',
+  '@deepseek-ai/dsh-bash-sandbox',
+  '@deepseek-ai/dsh-terminal',
+  '@deepseek-ai/dsh-terminal-local',
+  '@deepseek-ai/dsh-terminal-bash',
+  '@deepseek-ai/dsh-terminal-remote',
+  '@deepseek-ai/dsh-ptc-runtime-node',
+  '@deepseek-ai/dsh-ptc-runtime-sandbox',
+  '@deepseek-ai/dsh-ptc-runtime-remote',
+  '@deepseek-ai/dsh-workflow-ptc',
+  '@deepseek-ai/dsh-tool-workflow',
+  '@deepseek-ai/dsh-tool-ralph',
+  '@deepseek-ai/dsh-tool-cordis',
+  '@deepseek-ai/dsh-cordis-host-runner',
+  '@deepseek-ai/dsh-cordis-client-runner',
+  '@deepseek-ai/dsh-mcp-client',
+  '@deepseek-ai/dsh-subagent-spawn-codex',
+  '@deepseek-ai/dsh-subagent-spawn-claude-code',
+])
+
 function readManifest(filename: string): object {
   return JSON.parse(readFileSync(filename, 'utf8')) as object
 }
@@ -61,7 +90,7 @@ function manifestOf(ctx: Context, name: string, parentURL: string): object | und
 }
 
 /** Prepare profile or preset rows before the owning DSH caller passes them to Loader.
- * Only a compatibility conflict denies a row: an entry whose manifest cannot be resolved keeps
+ * The cleaned web/headless installation denies arbitrary execution providers and consumers before compatibility exemptions. A compatibility conflict also denies a row: an entry whose manifest cannot be resolved keeps
  * the Loader's own import failure. A denied ordinary row gains `disabled`; a native Include that
  * reaches a denied plugin is denied as a whole, because its file is never rewritten.
  * @param ctx Context carrying launcher-owned profile facts; non-profile contexts retain their rows.
@@ -97,11 +126,20 @@ function preflight(
   const { exemptions, warnings } = readProfileCompatibility(profile.dir)
   for (const warning of warnings) process.stderr.write(`${warning}\n`)
   const includes = new Set<string>()
-  /** Only a compatibility conflict denies a row; every other failure keeps the Loader's own diagnosis. */
+  /** Execution policy precedes compatibility exemptions; unresolved unrelated modules retain Loader diagnostics. */
   const denial = (row: EntryOptions, base: string): string | undefined => {
     try {
+      const localOnly = profile.name === 'web' || profile.name === 'headless'
+      const declaredPackage = barePackageName(row.name)
+      if (localOnly && declaredPackage !== undefined && LOCAL_ONLY_EXECUTION_PACKAGES.has(declaredPackage)) {
+        return 'LOCAL_ONLY installation disables arbitrary execution; use workspace filesystem tools'
+      }
       const manifest = manifestOf(ctx, row.name, base)
       if (manifest === undefined) return undefined
+      if (localOnly && 'name' in manifest && typeof manifest.name === 'string'
+        && LOCAL_ONLY_EXECUTION_PACKAGES.has(manifest.name)) {
+        return 'LOCAL_ONLY installation disables arbitrary execution; use workspace filesystem tools'
+      }
       const issue = evaluatePluginCompatibility(manifest, exemptions)
       return issue === undefined || issue.exempted ? undefined : pluginCompatibilityWarning(issue)
     } catch (error) {

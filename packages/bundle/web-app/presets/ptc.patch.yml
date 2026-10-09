@@ -20,10 +20,10 @@
               maxBytes: 65536
           - id: tool-bash
             name: '@deepseek-ai/dsh-tool-bash'
-            disabled: !!js process.platform === 'win32'
+            disabled: true
           - id: tool-pwsh
             name: '@deepseek-ai/dsh-tool-pwsh'
-            disabled: !!js process.platform !== 'win32'
+            disabled: true
           - id: tool-fs
             name: '@deepseek-ai/dsh-tool-fs'
           - id: tool-fs-search
@@ -148,7 +148,7 @@
           - id: tool-presentation
             name: '@deepseek-ai/dsh-agent-tool-presentation'
             config:
-              mode: ptc
+              mode: native
           - id: present
             name: '@deepseek-ai/dsh-tool-present'
           - id: tool-plugin-manager

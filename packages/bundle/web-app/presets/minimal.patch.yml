@@ -14,6 +14,12 @@
               prefix: You are a helpful software engineer assistant.
               complete: true
               includeRuntimeContext: false
+          - id: tool-fs
+            name: '@deepseek-ai/dsh-tool-fs'
+          - id: tool-fs-search
+            name: '@deepseek-ai/dsh-tool-fs-search'
+            config:
+              sampleOverCapGlobResults: false
           - id: persistent-shell
             name: cordis:group
             group: true
@@ -22,14 +28,15 @@
             config:
               - id: pty
                 name: '@deepseek-ai/dsh-terminal'
+                disabled: true
               - id: terminal-bash
                 name: '@deepseek-ai/dsh-terminal-bash'
-                disabled: !!js process.platform === 'win32'
+                disabled: true
                 config:
                   timeoutMs: 300000
               - id: persistent-bash
                 name: '@deepseek-ai/dsh-tool-bash-persistent'
-                disabled: !!js process.platform === 'win32'
+                disabled: true
                 config:
                   timeoutMs: 300000
                   description: |-
@@ -42,13 +49,13 @@
                     * Please run long lived commands in the background, e.g. 'sleep 10 &' or start a server in the background.
               - id: terminal-pwsh
                 name: '@deepseek-ai/dsh-terminal-bash'
-                disabled: !!js process.platform !== 'win32'
+                disabled: true
                 config:
                   shellDialect: pwsh
                   timeoutMs: 300000
               - id: persistent-pwsh
                 name: '@deepseek-ai/dsh-tool-pwsh-persistent'
-                disabled: !!js process.platform !== 'win32'
+                disabled: true
                 config:
                   timeoutMs: 300000
                   description: |-
