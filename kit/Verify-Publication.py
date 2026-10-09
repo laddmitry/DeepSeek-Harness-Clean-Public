@@ -17,7 +17,7 @@ else:
   actual={item.filename:digest(archive.read(item)) for item in archive.infolist() if not item.is_dir()}
  if actual!=expected: errors.append('Selected commit tree differs from prepared manifest: '+target)
  if git('status','--porcelain'): errors.append('Working tree has uncommitted changes')
- print('COMMIT',target,'TARGET_TREE_CHECKED',len(commits),'HISTORY_REVIEW_SEPARATE')
+ print('COMMIT',target,'TARGET_TREE_CHECKED',1,'HISTORY_REVIEW_SEPARATE')
 if errors:
  print('\n'.join('FAIL '+e for e in errors));sys.exit(1)
 print('PASS: exact prepared bytes. Secret/author review and runtime limits remain applicable.')

@@ -5526,7 +5526,7 @@
     "kit/Freeze-WindowsPermissions.ps1": "d71cc87787c10977ca607192ff10aaa5472f6f291f6f3754140481e5f6b3b040",
     "kit/Initialize-WindowsWorker.ps1": "f22eb3537b56190a37a88606dcebe9ff8b69c54ecbdaf61b8fc95ec45f6c7444",
     "kit/Run-Harness.ps1": "72c1b796873c2d28a589ecb4782e6564a0d904981b5da4e38d7f61944d17a5df",
-    "kit/Verify-Publication.py": "5394c23144bb66b77e4db6943fee69d628696bfe0af3ca2b76e299ffa91e206c",
+    "kit/Verify-Publication.py": "1f17914682ca629083787d0a983bcaabef2b3f27bce907f2d7628a715254e956",
     "lefthook.yml": "3b09abafc7e030e5e3f285b39ba47a36079664fd54f49ba0afd160b21e893f82",
     "native/README.i18n.yaml": "e21aeeed89586757cdef4172f1821a801767d7d7df108e9c3fef10ac73904d87",
     "native/README.md": "d5b903c6fe4fc01a53653b69d6d3c386162b66d8f03f30565a3da3e3c8ecaba4",
