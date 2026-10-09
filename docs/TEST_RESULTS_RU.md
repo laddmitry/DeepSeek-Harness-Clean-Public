@@ -20,3 +20,7 @@
 Семь уникальных целевых сценариев PASS; transport-control — отдельный восьмой контроль инструмента. Первоначальный config test имел resolver error и был повторён после исправления только теста. Это не production FIXED. NAT: 80 378 TCP ETW events, 472 DNS events, 279 process events, Lost=0; Node/target-WFP DeepSeek attempts=0. Некоторые сетевые metadata других PID нельзя приписывать Harness или DeepSeek.
 
 Команда исторического driver: `node <validation-directory>/deepseek-egress-targeted.mjs <case>`; cases sdk-profile, configuration, lifecycle, success, http-error, unavailable, redirect, transport-control. Driver VM-specific и зависимый от исключённого gateway не включён как якобы воспроизводимый portable тест. Source regression [tests/deepseek-clean-config.mjs](../tests/deepseek-clean-config.mjs) добавлен для публикации; выполнение **NOT VERIFIED**, команда `node tests/deepseek-clean-config.mjs`, проверяет только текст configuration. Исходные unit tests сохранены; их наличие не доказывает запуск.
+
+## Исправление FIL-003
+
+Результаты выше исторические. Новые адресные результаты описаны в FIL003_CHANGES_RU.md и отдельном операторском evidence packet: model-facing execution отключён и перепроверен, FS workspace операции сохранены. Три sidecars и upgrade guide прошли scoped проверку при завершении; runtime при этом не повторялся. Остальные FAIL/BLOCKED старого 41-пунктового отчёта не отменены.

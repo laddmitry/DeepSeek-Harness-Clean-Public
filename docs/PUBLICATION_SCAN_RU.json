@@ -1,5 +1,5 @@
 {
-  "scope": "Every regular publication file including hidden files; UTF-8 source scan, binary payload classification, OOXML members inspected separately. No original Git history included.",
+  "scope": "Historical pre-FIL003 source-only scan; not evidence of the new commit scan. Current folder/ZIP verification is in the separate FIL003 publication delivery report.",
   "originalScanFiles": 14127,
   "highConfidenceCandidates": 8,
   "highConfidenceClassification": "8 synthetic test fixture key literals; no production key pattern found",
